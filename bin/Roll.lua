@@ -129,6 +129,12 @@ function Roll:output()
     return result
 end
 
+function Roll:get_result() return private[self.uuid].result end
+function Roll:set_result(v)
+    assert(type(v) == "number", "The result of a roll must be a numeric value.")
+    private[self.uuid].result = v
+end
+
 function Roll:__tostring()
     local p, result = private[self.uuid], ""
 
