@@ -18,7 +18,7 @@ function Roll:new()
     p.d12 = Die(12)
     p.d20 = Die(20)
 
-    p.roll = 0
+    p.result = 0
 end
 
 Roll.validDiceSizes = { nil, true, nil, true, nil, true, nil, true, nil, true, nil, true, nil, nil, nil, nil, nil, nil, nil, true }
