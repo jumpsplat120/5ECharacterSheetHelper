@@ -21,18 +21,18 @@ function Roll:new()
     p.roll = 0
 end
 
-Roll.validDiceSizes = { d2 = true, d4 = true, d6 = true, d8 = true, d10 = true, d12 = true, d20 = true }
+Roll.validDiceSizes = { nil, true, nil, true, nil, true, nil, true, nil, true, nil, true, nil, nil, nil, nil, nil, nil, nil, true }
 
 local function validateDie(die)
     assert(type(die) == "number", "'" .. tostring(die) .. "' is not a number.")
 
-    assert(Roll.validDiceSizes["d" .. tostring(die)], "Invalid die size. Valid die sizes are 2, 4, 6, 8, 10, 12 and 20.")
+    assert(Roll.validDiceSizes[die], "Invalid die size. Valid die sizes are 2, 4, 6, 8, 10, 12 and 20.")
 end
 
 function Roll:start(amt, die_size)
     validateDie(die_size)
 
-    self.tbl = { {amt, private[self.uuid]["d" .. tostring(die_size)], {} } }
+    self.tbl = { {amt, private[self.uuid][die_size], {} } }
 
     return self
 end
@@ -41,7 +41,7 @@ function Roll:plus(amt, die_size)
     assert(self.tbl, "No roll has been started. Start a roll with :start(die_size)")
     validateDie(die_size)
 
-    self.tbl[#self.tbl + 1] = { amt, private[self.uuid]["d" .. tostring(die_size)], {} }
+    self.tbl[#self.tbl + 1] = { amt, private[self.uuid][die_size], {} }
 
     return self
 end
