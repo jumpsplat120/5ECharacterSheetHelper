@@ -45,11 +45,12 @@ end
 function Stat:revert(steps, reason)
     local p  = private[self.uuid]
     local ni = math.max(math.min(p.index - (steps or 1), 1), #p.history - 1)
+    
     assert(not p.obvert_entry, "Unable to revert as you've already reverted.")
 
     p.obvert_entry = p.history[#p.history].value
     p.index = ni
-    
+
     self:change(p.history[ni].value, "REVERT", reason or "No reason given.")
 end
 
