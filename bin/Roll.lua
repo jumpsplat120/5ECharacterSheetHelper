@@ -124,7 +124,7 @@ function Roll:output()
         result = result + (mods_tbl.add or 0)
     end
 
-    private[self.uuid].roll = result
+    private[self.uuid].result = result
 
     return result
 end
