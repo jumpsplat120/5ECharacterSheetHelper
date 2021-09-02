@@ -28,9 +28,9 @@ function BoundedStat:new(min, max, val, reason)
     p.value = Stat(val, reason)
 end
 
-function BoundedStat:get_min()   return private[self.uuid].min.value   end
-function BoundedStat:get_max()   return private[self.uuid].max.value   end
-function BoundedStat:get_value() return private[self.uuid].value.value end
+function BoundedStat:get_min()   return private[self.uuid].min   end
+function BoundedStat:get_max()   return private[self.uuid].max   end
+function BoundedStat:get_value() return private[self.uuid].value end
 
 function BoundedStat:set_min(_)   error("Unable to set minimum. Please use the 'setMin' method.") end
 function BoundedStat:set_max(_)   error("Unable to set maximum. Please use the 'setMax' method.") end
