@@ -28,9 +28,11 @@ function Health:new(max, bonus, val, reason)
     p.value = StatBoundedStat(0, max, val, reason)
 end
 
+function Health:get_min() error("Unable to get minimum health, as minimum health needs to remain as zero.") end
 function Health:get_max() return private[self.uuid].value.max end
 function Health:get_value() return private[self.uuid].value.value end
 function Health:get_bonus() return private[self.uuid].bonus end
+function Health:get_min() error("Unable to set minimum health, as minimum health needs to remain as zero.") end
 function Health:set_max(_) error("Unable to set max health. Adjust the max health as its own Stat.") end
 function Health:set_value(_) error("Unable to set value. Please use one of the respective methods.") end
 function Health:set_bonus(_) error("Unable to set bonus. Adjust the bonus as its own Stat.") end
