@@ -13,11 +13,11 @@ function Character:new(name, age, gender, height, weight)
 
     local p = private[self.uuid]
 
-    self.age    = Stat(age, "CC")
-    self.name   = Stat(name, "CC")
-    self.gender = Stat(gender, "CC")
-    self.height = Stat(height, "CC")
-    self.weight = Stat(weight, "CC")
+    p.age    = Stat(age, "CC")
+    p.name   = Stat(name, "CC")
+    p.gender = Stat(gender, "CC")
+    p.height = Stat(height, "CC")
+    p.weight = Stat(weight, "CC")
 end
 
 Character.__type = "character"
