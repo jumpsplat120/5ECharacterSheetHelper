@@ -26,3 +26,18 @@ function Character:__tostring()
     return "Character: " .. private[self.uuid].name
 end
 
+-- name
+-- [class = level, class = level]
+-- background = [ details, ]
+-- race
+-- alignment
+-- player_name
+-- xp_points
+-- proficeny_bonus
+-- armor_class
+-- speed
+-- abilities = [ strength = [ total, modifier, roll(), rollSave() ], ...]
+-- skills = [ acrobatics = [ total, roll(), relavant_ability, proficeny ], ... ]
+-- passive perception
+--
+--
