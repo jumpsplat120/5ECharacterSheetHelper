@@ -32,7 +32,7 @@ function Stat:get_history() return private[self.uuid].history end
 function Stat:set_value(_) error("Use the 'change' method to update a stat.") end
 function Stat:set_history(_) error("You may not change the history table directly.") end
 
-function Stat:change(val, action, reason, index)
+function Stat:change(val, action, reason)
     local p       = private[self.uuid]
     local old_val = self.value
 
