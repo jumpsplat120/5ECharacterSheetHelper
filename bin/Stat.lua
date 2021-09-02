@@ -42,7 +42,7 @@ function Stat:change(val, action, reason)
 
     p.index = p.index + 1
     p.history[p.index] = createEntry(val, action, reason)
-    while p.index != #p.history do p.history[#p.history] = nil end
+    while p.index ~= #p.history do p.history[#p.history] = nil end
 end
 
 function Stat:revert(steps, reason)

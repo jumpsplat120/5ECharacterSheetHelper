@@ -16,8 +16,13 @@ local Character    = require("bin.Character")
 math.randomseed(socket.gettime() * 1000)
 
 health = Health(25)
-print(health.value)
---health:damage(15)
+print(health)
+heath.value:revert()
+print(health)
+health:damage(15)
+print(health)
+heath.value:revert()
+print(health)
 --
 --print(health)
 --
