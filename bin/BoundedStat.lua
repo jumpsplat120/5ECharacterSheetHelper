@@ -63,19 +63,6 @@ function BoundedStat:setValue(val, action, reason)
     p.value:change(val, action, reason)
 end
 
-function BoundedStat:revert(steps, reason)
-    local p = private[self.uuid]
-
-    assert(not p.obvert_entry, "Unable to revert as you've already reverted.")
-
-    p.obvert_entry = p.history[#p.history].value
-    
-    self:change(p.history[math.max(#p.history - (steps or 1), 1)].value, "REVERT", reason or "No reason given.")
-end
-
-function BoundedStat:obvert()
-end
-
 BoundedStat.__type = "BoundedStat"
 
 function BoundedStat:__tostring()
