@@ -17,12 +17,24 @@ math.randomseed(socket.gettime() * 1000)
 
 health = Health(25)
 print(health)
-health.value:revert()
-print(health)
+--health.value:revert()
+--print(health)
+
 health:damage(15)
 print(health)
-heath.value:revert()
+print(inspect(health.value.history))
+
+health.value:revert()
 print(health)
+print(inspect(health.value.history))
+
+health.value:obvert()
+print(health)
+print(inspect(health.value.history))
+
+health:damage(5)
+print(health)
+print(inspect(health.value.history))
 --
 --print(health)
 --
