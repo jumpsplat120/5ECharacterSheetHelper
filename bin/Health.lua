@@ -35,13 +35,6 @@ function Health:set_max(_) error("Unable to set max health. Adjust the max healt
 function Health:set_value(_) error("Unable to set value. Please use one of the respective methods.") end
 function Health:set_bonus(_) error("Unable to set bonus. Adjust the bonus as its own Stat.") end
 
---setBonus clamps at zero, and has some contextual error checking
-function Health:setMax(num, action, reason)
-    local p = private[self.uuid]
-
-    p.value:setMax()
-end
-
 --Returns DEAD, DOWN, or OKAY based on remaining health
 function Health:damage(num, reason)
     local p, val, bonus = private[self.uuid]
