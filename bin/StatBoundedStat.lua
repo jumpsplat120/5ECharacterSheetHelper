@@ -3,9 +3,9 @@ local Stat    = require("bin.Stat")
 local private = require("bin.instances")
 local inspect = require("lib.inspect.main")
 
-local BoundedStat = Object:extend()
+local StatBoundedStat = Object:extend()
 
-function BoundedStat:new(min, max, val, reason)
+function StatBoundedStat:new(min, max, val, reason)
     min = min or 0
     max = max or 0
     val = val or 0
@@ -28,15 +28,15 @@ function BoundedStat:new(min, max, val, reason)
     p.value = Stat(val, reason)
 end
 
-function BoundedStat:get_min()   return private[self.uuid].min   end
-function BoundedStat:get_max()   return private[self.uuid].max   end
-function BoundedStat:get_value() return private[self.uuid].value end
+function StatBoundedStat:get_min()   return private[self.uuid].min   end
+function StatBoundedStat:get_max()   return private[self.uuid].max   end
+function StatBoundedStat:get_value() return private[self.uuid].value end
 
-function BoundedStat:set_min(_)   error("Unable to set minimum. Please use the 'setMin' method.") end
-function BoundedStat:set_max(_)   error("Unable to set maximum. Please use the 'setMax' method.") end
-function BoundedStat:set_value(_) error("Unable to set value. Please use the 'setValue' method.") end
+function StatBoundedStat:set_min(_)   error("Unable to set minimum. Please use the 'setMin' method.") end
+function StatBoundedStat:set_max(_)   error("Unable to set maximum. Please use the 'setMax' method.") end
+function StatBoundedStat:set_value(_) error("Unable to set value. Please use the 'setValue' method.") end
 
-function BoundedStat:setMin(val, action, reason)
+function StatBoundedStat:setMin(val, action, reason)
     local p = private[self.uuid]
 
     assert(val <= p.max.value, "Minimum value must be smaller than or equal to the maximum bound.")
@@ -45,7 +45,7 @@ function BoundedStat:setMin(val, action, reason)
     p.min:change(val, action, reason)
 end
 
-function BoundedStat:setMax(val, action, reason)
+function StatBoundedStat:setMax(val, action, reason)
     local p = private[self.uuid]
 
     assert(val >= p.min.value, "Maximum value must be larger than or equal to the minimum bound.")
@@ -54,7 +54,7 @@ function BoundedStat:setMax(val, action, reason)
     p.max:change(val, action, reason)
 end
 
-function BoundedStat:setValue(val, action, reason)
+function StatBoundedStat:setValue(val, action, reason)
     local p = private[self.uuid]
 
     assert(val >= p.min.value, "Input value must be bigger than the minimum bound.")
@@ -63,11 +63,11 @@ function BoundedStat:setValue(val, action, reason)
     p.value:change(val, action, reason)
 end
 
-BoundedStat.__type = "BoundedStat"
+StatBoundedStat.__type = "StatBoundedStat"
 
-function BoundedStat:__tostring()
+function StatBoundedStat:__tostring()
     local p = private[self.uuid]
 	return "Min: " .. p.min.value .. ", Max: " .. p.max.value .. ", Value: " .. p.value.value
 end
 
-return BoundedStat
+return StatBoundedStat
