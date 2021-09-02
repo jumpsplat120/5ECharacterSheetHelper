@@ -83,4 +83,10 @@ function Stat:obvert(steps, reason)
     self:change(p.history[p.index].value, "OBVERT", reason or "No reason given.")
 end
 
+Stat.__type = "Stat"
+
+function Stat:__tostring()
+	return "s" + private[self.uuid].value
+end
+
 return Stat
