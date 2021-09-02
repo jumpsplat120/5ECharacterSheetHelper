@@ -48,7 +48,7 @@ end
 function Health:damage(num, reason)
     local p, val, bonus = private[self.uuid]
 
-    val   = p.value.value
+    val   = self.value.value
     bonus = p.bonus.value
 
     if bonus > 0 then
@@ -59,38 +59,34 @@ function Health:damage(num, reason)
     p.value:setValue(math.max(val - num, 0), "DECREASE", reason)
     num = num - val
 
-    return num >= p.value.max.value +  and "DEAD" or num >= 0 and "DOWN" or "OKAY"
+    return num >= self.max.value and "DEAD" or num >= 0 and "DOWN" or "OKAY"
 end
 
 --Returns how much was actually healed by
 function Health:heal(num, reason)
-    local p, val, bound
-    
-    p = private[self.uuid]
-    bound = p.value
-    val   = bound.value.value
+    local p, val = private[self.uuid]
 
-    bound:setValue(math.min(val + num, bound.max.value), "INCREASE", reason)
+    val = self.value.value
 
-    return bound.value.value - val
+    p.value:setValue(math.min(val + num, self.max.value), "INCREASE", reason)
+
+    return self.value.value - val
 end
 
 --Returns how much was actually healed by
 function Health:fullHeal(reason)
-    local p, val, bound
-    
-    p = private[self.uuid]
-    bound = p.value
-    val   = bound.value.value
+    local p, val = private[self.uuid]
 
-    bound:setValue(bound.max.value, "INCREASE", reason)
+    val = self.value.value
 
-    return bound.value.value - val
+    bound:setValue(self.max.value, "INCREASE", reason)
+
+    return self.value.value - val
 end
 
 function Health:__tostring()
     local p = private[self.uuid]
-	return "current: " .. p.value.value .. " / max: " .. p.max.value .. " (Temp: " .. p.bonus.value .. ")"
+	return "current: " .. p.value.value.value .. " / max: " .. p.value.max.value .. " (Temp: " .. p.bonus.value .. ")"
 end
 
 Health.__type = "health"
