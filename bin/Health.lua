@@ -44,6 +44,13 @@ function Health:setBonus(num, action, reason)
     private[self.uuid].bonus:change(num, action, reason)
 end
 
+--setBonus clamps at zero, and has some contextual error checking
+function Health:setMax(num, action, reason)
+    local p = private[self.uuid]
+
+    p.value:setMax()
+end
+
 --Returns DEAD, DOWN, or OKAY based on remaining health
 function Health:damage(num, reason)
     local p, val, bonus = private[self.uuid]
@@ -85,8 +92,7 @@ function Health:fullHeal(reason)
 end
 
 function Health:__tostring()
-    local p = private[self.uuid]
-	return "current: " .. p.value.value.value .. " / max: " .. p.value.max.value .. " (Temp: " .. p.bonus.value .. ")"
+	return "current: " .. self.value.value .. " / max: " .. self.max.value .. " (Temp: " .. private[self.uuid].bonus.value .. ")"
 end
 
 Health.__type = "health"
