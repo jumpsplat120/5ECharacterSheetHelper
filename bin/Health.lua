@@ -1,3 +1,4 @@
+local StatBoundedStat = require("bin.StatBoundedStat")
 local BoundedStat = require("bin.BoundedStat")
 local Stat        = require("bin.Stat")
 local private     = require("bin.instances")
@@ -23,26 +24,16 @@ function Health:new(max, bonus, val, reason)
 
     local p = private[self.uuid]
 
-    p.bonus = Stat(bonus, reason)
-    p.value = BoundedStat(0, max, val, reason)
+    p.bonus = BoundedStat(0, math.huge, bonus, reason)
+    p.value = StatBoundedStat(0, max, val, reason)
 end
 
 function Health:get_max() return private[self.uuid].value.max end
 function Health:get_value() return private[self.uuid].value.value end
 function Health:get_bonus() return private[self.uuid].bonus end
-function Health:set_max(_) error("Unable to set max health. Adjust the max health as it's own Stat.") end
-function Health:set_value(_) error("Unable to set value. Please use the 'damage' or 'heal' methods.") end
-function Health:set_bonus(_) error("Unable to set bonus. Use the 'setBonus' method.") end
-
---setBonus clamps at zero, and has some contextual error checking
-function Health:setBonus(num, action, reason)
-    assert(num, "Missing numeric value for health.")
-    assert(action, "Missing action for health.")
-    assert(type(num) == "number", "'" .. tostring(num) .. "' is not a number.")
-    assert(num >= 0, "You are not able to set temporary health less than zero.")
-
-    private[self.uuid].bonus:change(num, action, reason)
-end
+function Health:set_max(_) error("Unable to set max health. Adjust the max health as its own Stat.") end
+function Health:set_value(_) error("Unable to set value. Please use one of the respective methods.") end
+function Health:set_bonus(_) error("Unable to set bonus. Adjust the bonus as its own Stat.") end
 
 --setBonus clamps at zero, and has some contextual error checking
 function Health:setMax(num, action, reason)
