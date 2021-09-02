@@ -3,7 +3,7 @@ local Stat        = require("bin.Stat")
 local private     = require("bin.instances")
 --local inspect = require("lib.inspect.main")
 
-local Health  = BoundedStat:extend()
+local Health = Object:extend()
 
 function Health:new(max, bonus, val, reason)
     bonus = bonus or 0
@@ -21,24 +21,30 @@ function Health:new(max, bonus, val, reason)
 
     private[self.uuid] = private[self.uuid] or {}
 
-    private[self.uuid].bonus = Stat(bonus, reason)
+    local p = private[self.uuid]
 
-    Health.super.new(self, 0, max, val, reason)
+    p.bonus = Stat(bonus, reason)
+    p.value = BoundedStat(0, max, val, reason)
 end
 
+function Health:get_max() return private[self.uuid].value.max end
+function Health:get_value() return private[self.uuid].value.value end
 function Health:get_bonus() return private[self.uuid].bonus end
-function Health:set_bonus() error("Unable to set bonus. Please use the 'setBonus' method.") end
+function Health:set_max(_) error("Unable to set max health. Adjust the max health as it's own Stat.") end
+function Health:set_value(_) error("Unable to set value. Please use the 'damage' or 'heal' methods.") end
+function Health:set_bonus(_) error("Unable to set bonus. Use the 'setBonus' method.") end
 
+--setBonus clamps at zero, and has some contextual error checking
 function Health:setBonus(num, action, reason)
     assert(num, "Missing numeric value for health.")
     assert(action, "Missing action for health.")
-    assert(reason, "Missing reason for health.")
     assert(type(num) == "number", "'" .. tostring(num) .. "' is not a number.")
     assert(num >= 0, "You are not able to set temporary health less than zero.")
 
     private[self.uuid].bonus:change(num, action, reason)
 end
 
+--Returns DEAD, DOWN, or OKAY based on remaining health
 function Health:damage(num, reason)
     local p, val, bonus = private[self.uuid]
 
@@ -50,21 +56,36 @@ function Health:damage(num, reason)
         num = math.max(num - bonus, 0)
     end
 
-    p.value:change(math.max(val - num, 0), "DECREASE", reason)
+    p.value:setValue(math.max(val - num, 0), "DECREASE", reason)
     num = num - val
 
-    return num >= p.max.value and "DEAD" or num >= 0 and "DOWN" or "OKAY"
+    return num >= p.value.max.value +  and "DEAD" or num >= 0 and "DOWN" or "OKAY"
 end
 
+--Returns how much was actually healed by
 function Health:heal(num, reason)
-    local p, max, val = private[self.uuid]
+    local p, val, bound
+    
+    p = private[self.uuid]
+    bound = p.value
+    val   = bound.value.value
 
-    max = p.max.value
-    val = p.value.value
+    bound:setValue(math.min(val + num, bound.max.value), "INCREASE", reason)
 
-    p.value:change(math.min(val + num, max), "INCREASE", reason)
+    return bound.value.value - val
+end
 
-    return p.value.value - val
+--Returns how much was actually healed by
+function Health:fullHeal(reason)
+    local p, val, bound
+    
+    p = private[self.uuid]
+    bound = p.value
+    val   = bound.value.value
+
+    bound:setValue(bound.max.value, "INCREASE", reason)
+
+    return bound.value.value - val
 end
 
 function Health:__tostring()
