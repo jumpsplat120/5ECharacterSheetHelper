@@ -1,4 +1,5 @@
 local BoundedStat = require("bin.BoundedStat")
+local BoundedStat = require("bin.Roll")
 local Object  = require("lib.classic.main")
 local private = require("bin.instances")
 local inspect = require("lib.inspect.main")
@@ -6,7 +7,7 @@ local inspect = require("lib.inspect.main")
 local Ability = Object:extend()
 
 --[ total, modifier, roll(), rollSave() ]
-function Ability:new(name, value, reason)
+function Ability:new(name, value, proficent, reason)
     value = value or 1
 
     assert(name, "Abilities require a name.")
@@ -19,6 +20,8 @@ function Ability:new(name, value, reason)
 
     p.name = name
     p.stat = BoundedStat(0, 20, value, reason)
+
+    self.proficent = proficent
 end
 
 function Ability:get_stat() return private[self.uuid].stat.value end
@@ -35,9 +38,12 @@ function Ability:decrease(val, reason)
 end
 
 function Ability:roll()
+    local p = private[self.uuid]
+
+    Roll
 end
 
-function Ability:rollSave()
+function Ability:rollSave(prof_bonus)
 end
 
 Ability.__type = "Ability"

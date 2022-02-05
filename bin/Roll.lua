@@ -29,6 +29,7 @@ local function validateDie(die)
     assert(Roll.validDiceSizes[die], "Invalid die size. Valid die sizes are 2, 4, 6, 8, 10, 12 and 20.")
 end
 
+--Start a roll formula. Every roll starts with 'start' and ends with 'output'
 function Roll:start(amt, die_size)
     validateDie(die_size)
 
@@ -37,6 +38,7 @@ function Roll:start(amt, die_size)
     return self
 end
 
+--Adds a die to the roll
 function Roll:plus(amt, die_size)
     assert(self.tbl, "No roll has been started. Start a roll with :start(die_size)")
     validateDie(die_size)
@@ -46,6 +48,7 @@ function Roll:plus(amt, die_size)
     return self
 end
 
+--Adds a singluar number to the roll
 function Roll:add(num)
     assert(self.tbl, "No roll has been started. Start a roll with :start(die_size)")
     assert(type(num) == "number", "Expected number, recieved '" ..  type(num) .. "'.")
@@ -56,6 +59,7 @@ function Roll:add(num)
     return self
 end
 
+--Rerolls an existing roll.
 function Roll:reroll(...)
     for _, num in ipairs({...}) do
         assert(self.tbl, "No roll has been started. Start a roll with :start(die_str)")
@@ -73,15 +77,19 @@ function Roll:reroll(...)
     return self
 end
 
-function Roll:advantage()
+--Add advantage to the roll. You can add advantage multiple times, which will even out with multiple disadvantages.
+--If you have more advantage than disadvantage at the end, regardless of how many, you roll with advantage 1 time.
+function Roll:advantage(num)
     assert(self.tbl, "No roll has been started. Start a roll with :start(die_str)")
     local mods = self.tbl[#self.tbl][3]
 
-    mods.advantage = (mods.advantage or 0) + 1
+    mods.advantage = (mods.advantage or 0) + (num or 0)
 
     return self
 end
 
+--Add disadvantage to the roll. You can add disadvantage multiple times, which will even out with multiple advantages.
+--If you have more disadvantage than advantage at the end, regardless of how many, you roll with disadvantage 1 time.
 function Roll:disadvantage()
     assert(self.tbl, "No roll has been started. Start a roll with :start(die_str)")
     local mods = self.tbl[#self.tbl][3]
